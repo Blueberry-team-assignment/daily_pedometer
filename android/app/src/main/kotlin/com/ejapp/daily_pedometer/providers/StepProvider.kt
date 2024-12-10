@@ -7,7 +7,12 @@ object StepProvider {
 
     fun sendStep(steps: Int) {
         eventSink?.success(steps)
-        eventSink?.success(true)
+//        eventSink?.success(
+//            mapOf(
+//                "steps" to steps,
+//                "isSuccess" to true,
+//            )
+//        )
     }
 
     fun sendError(errorMessage: String) {

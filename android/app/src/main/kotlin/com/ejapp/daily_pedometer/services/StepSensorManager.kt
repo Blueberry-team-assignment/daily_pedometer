@@ -49,11 +49,11 @@ class StepSensorManager(
     }
 
     /// 저장된 걸음이 있다면 불러오기
-    fun loadSteps() {
+    private fun loadSteps() {
         val savedSteps = PreferenceManager.getInt(context, STEPS_KEY, 0)
         if (savedSteps != 0) {
             steps = savedSteps
-            initialSteps = 0
+            initialSteps = -1
         }
     }
 
@@ -79,6 +79,7 @@ class StepSensorManager(
 
             if (initialSteps == -1) {
                 initialSteps = eventSteps - steps
+                Log.d("---> 여기 initialSteps", "${initialSteps}")
 
                 if (initialSteps < 0) {
                     initialSteps = 0
@@ -97,6 +98,7 @@ class StepSensorManager(
             } else {
                 newSteps
             }
+            PreferenceManager.setInt(context, STEPS_KEY, steps)
 
             Log.d("---> eventSteps:", "${eventSteps}")
             Log.d("---> initialSteps:", "${initialSteps}")
