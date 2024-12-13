@@ -2,13 +2,14 @@ part of 'provider.dart';
 
 @riverpod
 class StepsNotifierProvider extends _$StepsNotifierProvider {
-  static const _stepChannel = EventChannel("com.ejapp.daily_pedometer");
+  // static const _stepChannel = EventChannel("com.ejapp.daily_pedometer");
+  static const platform = EventChannel("com.ejapp.daily_pedometer");
 
   @override
   Future<int> build() async {
     log("state: $state");
     final initialSteps = await _loadSteps();
-    _listenToSteps();
+    // _listenToSteps();
     return initialSteps;
   }
 
@@ -26,20 +27,20 @@ class StepsNotifierProvider extends _$StepsNotifierProvider {
   }
 
   /// EventChannel 데이터 수신
-  void _listenToSteps() {
-    _stepChannel.receiveBroadcastStream().listen((event) async {
-      final newSteps = event as int;
-      log("---> 네이티브에서 불러오는 걸음: $newSteps");
+  // void _listenToSteps() {
+  //   _stepChannel.receiveBroadcastStream().listen((event) async {
+  //     final newSteps = event as int;
+  //     log("---> 네이티브에서 불러오는 걸음: $newSteps");
 
-      if (state is AsyncData<int>) {
-        final currentStep = state.value ?? 0;
-        if (newSteps > currentStep) {
-          state = AsyncData(newSteps);
-          await _saveSteps(newSteps);
-        }
-      }
-    }, onError: (error) {
-      log('Error: $error');
-    });
-  }
+  //     if (state is AsyncData<int>) {
+  //       final currentStep = state.value ?? 0;
+  //       if (newSteps > currentStep) {
+  //         state = AsyncData(newSteps);
+  //         await _saveSteps(newSteps);
+  //       }
+  //     }
+  //   }, onError: (error) {
+  //     log('Error: $error');
+  //   });
+  // }
 }

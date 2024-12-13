@@ -38,6 +38,9 @@ dependencies:
   # 로케이션 / 포매터
   intl: ^0.19.0
 
+  # 만보기
+  pedometer: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

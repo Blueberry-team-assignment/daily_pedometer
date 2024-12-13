@@ -69,9 +69,9 @@ class MainActivity: FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         FlutterEngineManager.initialize(flutterEngine)
-        FlutterEngineManager.setupEventChannel(CHANNEL_BRIDGE) { eventSink ->
-            StepProvider.eventSink = eventSink
-        }
+        // FlutterEngineManager.setupEventChannel(CHANNEL_BRIDGE) { eventSink ->
+        //     StepProvider.eventSink = eventSink
+        // }
 
         FlutterEngineManager.setupMethodChannel(CHANNEL_BRIDGE) { call, result ->
             if (call != null) {
