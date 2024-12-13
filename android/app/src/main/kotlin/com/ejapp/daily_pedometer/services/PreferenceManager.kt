@@ -5,9 +5,9 @@ import android.content.SharedPreferences
 
 object PreferenceManager {
 
-    private const val PREF_NAME = "app_preferences"
+    private const val PREF_NAME = "FlutterSharedPreferences"
 
-    fun getPreferences(context: Context): SharedPreferences {
+    private fun getPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
@@ -27,10 +27,20 @@ object PreferenceManager {
             .apply()
     }
 
-    fun getInt(context: Context, key: String, defaultValue: Int?): Int {
+    fun getInt(context: Context, key: String): Int {
         val prefs = getPreferences(context)
-        return prefs.getInt(key, defaultValue ?: 0)
+//        return prefs.getInt(key, defaultValue ?: 0)
+        return try {
+            if (prefs.contains(key)) {
+                prefs.getInt(key, 0)
+            } else {
+                prefs.getLong(key, 0L).toInt()
+            }
+        } catch (e: ClassCastException) {
+            prefs.getLong(key, 0L).toInt()
+        }
     }
+
 
     fun getString(context: Context, key: String, defaultValue: String?) : String {
         val prefs = getPreferences(context)

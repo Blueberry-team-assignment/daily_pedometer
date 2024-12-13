@@ -15,12 +15,9 @@ class PermissionHandlingManager(
 
     /// 권한 상태 확인
     fun checkPermissionStatus(): Boolean {
-        for (permission in requiredPermissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
+        return requiredPermissions.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
-        return true
     }
 
 
@@ -42,18 +39,10 @@ class PermissionHandlingManager(
     fun requestForegroundPermission(activity: Activity) {
         val foregroundHealthPermission = "android.permission.FOREGROUND_SERVICE_HEALTH"
         if (requiredPermissions.contains(foregroundHealthPermission)) {
-            Log.d("---> 퍼미션 체크", "requiredPermissions 체크")
             if (ContextCompat.checkSelfPermission(context, foregroundHealthPermission) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(activity, arrayOf(foregroundHealthPermission), 1001)
-                Log.d("---> 퍼미션 체크", "통과")
             }
-            Log.d("---> 퍼미션 체크", "통과 못함")
         }
-
-        /// 권한 승인, 서비스 시작
-        Log.d("---> 퍼미션 체크", "requestForegroundPermission 체크")
-        (activity as MainActivity).startNotificationService()
+//        (activity as MainActivity).startNotificationService()
     }
-
-
 }

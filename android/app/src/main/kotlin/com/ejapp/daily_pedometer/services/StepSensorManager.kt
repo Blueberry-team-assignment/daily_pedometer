@@ -36,25 +36,21 @@ class StepSensorManager(
     fun initialize() {
         sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-
+        loadSteps()
         if (stepSensor != null) {
             sensorManager?. registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI)
-            onNotificationUpdate("오늘도 힘차게 걸어보세요!")
+            onNotificationUpdate("걸음수: ${steps.coerceAtLeast(0)} 보")
             Log.d("---> initialize", "센서 매니저가 초기화 되었습니다...")
         } else {
             Log.e("---> initialize", "걸음 센서를 사용할 수 없습니다")
         }
-
-        loadSteps()
     }
 
     /// 저장된 걸음이 있다면 불러오기
     private fun loadSteps() {
-        val savedSteps = PreferenceManager.getInt(context, STEPS_KEY, 0)
-        if (savedSteps != 0) {
+        val savedSteps = PreferenceManager.getInt(context, STEPS_KEY)
             steps = savedSteps
             initialSteps = -1
-        }
     }
 
     fun midnightReset(context: Context) {
@@ -75,11 +71,10 @@ class StepSensorManager(
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
 
-            var eventSteps = event.values[0].toInt()
+            val eventSteps = event.values[0].toInt()
 
             if (initialSteps == -1) {
                 initialSteps = eventSteps - steps
-                Log.d("---> 여기 initialSteps", "${initialSteps}")
 
                 if (initialSteps < 0) {
                     initialSteps = 0
@@ -98,14 +93,14 @@ class StepSensorManager(
             } else {
                 newSteps
             }
-            PreferenceManager.setInt(context, STEPS_KEY, steps)
+//            PreferenceManager.setInt(context, STEPS_KEY, steps)
 
             Log.d("---> eventSteps:", "${eventSteps}")
             Log.d("---> initialSteps:", "${initialSteps}")
             Log.d("---> steps:", "${steps}")
 
             /// Flutter로 데이터 전송
-            StepProvider.sendStep(steps)
+//            StepProvider.sendStep(steps)
             onStepCountUpdated(steps)
             onNotificationUpdate("걸음수: $steps 보")
         }

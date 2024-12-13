@@ -28,25 +28,12 @@ class PersistentNotificationService : Service() {
         const val RESET_KEY = "midnight_reset"
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, makeNotification("걸음을 추적 중입니다..."))
-
-        stepSensorManager = StepSensorManager(
-            context = this,
-            onNotificationUpdate = {
-                steps ->
-                updateNotification(steps)
-            },
-            onStepCountUpdated = {
-                content ->
-                StepProvider.sendStep(content)
-            }
-        )
-
-        stepSensorManager.initialize()
-
+        scheduleMidnightReset()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -54,10 +41,30 @@ class PersistentNotificationService : Service() {
         if (isResetMidnight) {
             reset()
         }
-        val steps = PreferenceManager.getInt(this, StepSensorManager.STEPS_KEY, 0)
-        updateNotification("걸음수: ${steps.coerceAtLeast(0)}")
+        val savedSteps = PreferenceManager.getInt(this, StepSensorManager.STEPS_KEY)
+        val steps = intent?.getIntExtra("steps", savedSteps) ?: 0
+        updateNotification("걸음수: $steps 보")
 
+        val action = intent?.getStringExtra("action")
+        when (action) {
+            "START" -> startStepSensorManager()
+        }
         return START_STICKY
+    }
+
+    private fun startStepSensorManager() {
+        stepSensorManager = StepSensorManager(
+            context = this,
+            onNotificationUpdate = {
+                    content ->
+                updateNotification(content)
+            },
+            onStepCountUpdated = {
+                    steps ->
+                PreferenceManager.setInt(this, StepSensorManager.STEPS_KEY, steps)
+            },
+        )
+        stepSensorManager.initialize()
     }
 
 
@@ -112,7 +119,16 @@ class PersistentNotificationService : Service() {
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !AlarmReceiver().hasExactAlarmPermission(this)) {
+            AlarmReceiver().requestExactAlarmPermission(this)
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
     }
 
     private fun reset() {
