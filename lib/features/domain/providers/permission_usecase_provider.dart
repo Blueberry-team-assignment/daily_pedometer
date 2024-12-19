@@ -1,5 +1,5 @@
-import 'package:daily_pedometer/features/data/permission_repository_impl.dart';
-import 'package:daily_pedometer/features/data/permission_service.dart';
+import 'package:daily_pedometer/features/data/repositories/permission_repository_impl.dart';
+import 'package:daily_pedometer/features/domain/services/permission_service.dart';
 import 'package:daily_pedometer/features/domain/use-cases/permissions/check_all_permission_granted_usecase.dart';
 import 'package:daily_pedometer/features/domain/use-cases/permissions/check_permission_usecase.dart';
 import 'package:daily_pedometer/features/domain/use-cases/permissions/request_denied_permissions_usecase.dart';

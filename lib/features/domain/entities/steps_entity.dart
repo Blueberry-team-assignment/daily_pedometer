@@ -5,26 +5,31 @@ class StepsEntity {
   final int steps;
 
   /// [총 걸음 수 - 초기화 시킬 걸음 수]
-  final int? initialSteps;
+  final int initialSteps;
 
   /// [목표 걸음 수]
   final int targetedSteps;
 
+  final int maxSteps;
+
   StepsEntity({
     required this.steps,
-    this.initialSteps,
+    required this.initialSteps,
     required this.targetedSteps,
+    this.maxSteps = 50000,
   });
 
   StepsEntity copyWith({
     int? steps,
     int? initialSteps,
     int? targetedSteps,
+    int? maxSteps,
   }) =>
       StepsEntity(
         steps: steps ?? this.steps,
         initialSteps: initialSteps ?? this.initialSteps,
         targetedSteps: targetedSteps ?? this.targetedSteps,
+        maxSteps: maxSteps ?? this.maxSteps,
       );
 
   factory StepsEntity.fromRawJson(String str) =>
@@ -36,11 +41,13 @@ class StepsEntity {
         steps: json["steps"],
         initialSteps: json["initialSteps"],
         targetedSteps: json["targetedSteps"],
+        maxSteps: json["maxSteps"],
       );
 
   Map<String, dynamic> toJson() => {
         "steps": steps,
         "initialSteps": initialSteps,
         "targetedSteps": targetedSteps,
+        "maxSteps": maxSteps,
       };
 }

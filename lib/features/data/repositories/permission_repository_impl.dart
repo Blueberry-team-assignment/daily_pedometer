@@ -1,4 +1,4 @@
-import 'package:daily_pedometer/features/data/permission_service.dart';
+import 'package:daily_pedometer/features/domain/services/permission_service.dart';
 import 'package:daily_pedometer/features/domain/repositories/permission_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 
