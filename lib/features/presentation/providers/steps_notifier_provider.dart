@@ -16,7 +16,7 @@ class StepsNotifierProvider extends _$StepsNotifierProvider {
   /// 로컬 데이터 로드
   Future<int> _loadSteps() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedSteps = prefs.getInt('steps') ?? 0;
+    final savedSteps = prefs.getInt(stepsKey) ?? 0;
     return savedSteps;
   }
 

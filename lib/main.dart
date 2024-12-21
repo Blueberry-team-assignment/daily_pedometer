@@ -1,8 +1,7 @@
 import 'package:daily_pedometer/common/providers/provider.dart';
-import 'package:daily_pedometer/features/domain/providers/permission_usecase_provider.dart';
-import 'package:daily_pedometer/features/presentation/screens/pedometer_screen.dart';
+import 'package:daily_pedometer/features/pedometer/presentation/screens/pedometer_screen.dart';
+import 'package:daily_pedometer/features/permissions/domain/usecases/request_denied_permissions_usecase.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +12,7 @@ void main() async {
 
   final container = ProviderContainer();
   final checkAllPermissionsGrantedUseCase =
-      container.read(requestDeniedPermissionsUsecaseProvider);
+      container.read(requestDeniedPermissionUsecaseProvider);
 
   await checkAllPermissionsGrantedUseCase.execute([
     Permission.location,

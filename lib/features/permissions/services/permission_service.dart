@@ -1,4 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+final permissionServiceProvider = Provider((ref) => PermissionService());
 
 class PermissionService {
   static final PermissionService _instance = PermissionService._internal();
@@ -38,11 +41,6 @@ class PermissionService {
     var deniedPermissions = List<Permission>.from(permissions);
     do {
       await deniedPermissions.request();
-
-      // deniedPermissions = [
-      //   for (var permission in deniedPermissions)
-      //     if (!await isPermissionGranted(permission)) permission,
-      // ];
 
       var stillDenied = <Permission>[];
       for (var permission in deniedPermissions) {
