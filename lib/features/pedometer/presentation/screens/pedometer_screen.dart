@@ -9,28 +9,30 @@ class PedometerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final checkTargertedReachedUsecase =
         ref.watch(checkTargetedReachedUsecaseProvider);
-    return Center(
-      child: FutureBuilder<bool>(
-        future: Future(() => checkTargertedReachedUsecase.execute()),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
+    return Scaffold(
+      body: Center(
+        child: FutureBuilder<bool>(
+          future: Future(() => checkTargertedReachedUsecase.execute()),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
 
-          final targetReached = snapshot.data ?? false;
-          return Text(
-            targetReached ? "목표 도달!" : "목표까지 더 걸어야 합니다!",
-          );
-        },
+            final targetReached = snapshot.data ?? false;
+            return Text(
+              targetReached ? "목표 도달!" : "목표까지 더 걸어야 합니다!",
+            );
+          },
+        ),
+        // child: stepsState.when(
+        //   data: (steps) => Text(
+        //     "Steps: $steps",
+        //     style: Theme.of(context).textTheme.headlineLarge,
+        //   ),
+        //   error: (err, _) => Text("$err"),
+        //   loading: () => CircularProgressIndicator(),
+        // ),
       ),
-      // child: stepsState.when(
-      //   data: (steps) => Text(
-      //     "Steps: $steps",
-      //     style: Theme.of(context).textTheme.headlineLarge,
-      //   ),
-      //   error: (err, _) => Text("$err"),
-      //   loading: () => CircularProgressIndicator(),
-      // ),
     );
   }
 }
