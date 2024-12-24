@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.ejapp.daily_pedometer.providers.StepProvider
 import com.ejapp.daily_pedometer.receivers.AlarmReceiver
 import com.ejapp.daily_pedometer.services.FlutterEngineManager
@@ -29,6 +30,7 @@ class MainActivity: FlutterActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,6 +39,7 @@ class MainActivity: FlutterActivity() {
         if (!permissionHandlingManager.checkPermissionStatus()) {
             permissionHandlingManager.requestForegroundPermission(this)
         }
+//        requestPermissionsIfNeeded()
 
 
 //        else {
@@ -54,13 +57,9 @@ class MainActivity: FlutterActivity() {
         when (requestCode) {
             1001, 1002 -> { // Foreground Service 또는 일반 권한 요청 결과
                 if (grantResults.all { it == android.content.pm.PackageManager.PERMISSION_GRANTED }) {
-                    permissionHandlingManager.notifyPermissionStatusToFlutter(this)
+//                    permissionHandlingManager.notifyPermissionStatusToFlutter(this)
+                    startNotificationService()
                 }
-
-//                else {
-//                    // 권한 거부 처리
-//                    Toast.makeText(this, "필수 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-//                }
             }
         }
     }
@@ -91,7 +90,7 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    private fun startNotificationService() {
+     fun startNotificationService() {
         val intent = Intent(this, PersistentNotificationService::class.java).apply {
             putExtra("action", "START")
         }
@@ -102,14 +101,32 @@ class MainActivity: FlutterActivity() {
         }
     }
 
-    private fun updateNotificationService(steps: Int) {
+     private fun updateNotificationService(steps: Int) {
         val intent = Intent(this, PersistentNotificationService::class.java).apply {
             putExtra("steps", steps)
         }
-        startService(intent)
+//        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent) // Foreground Service 시작
+        } else {
+            startService(intent) // 일반 Service 시작
+        }
     }
 
     fun sendPermissionStatusToFlutter(flag: Boolean) {
         FlutterEngineManager.setupInvokeMethod(CHANNEL_BRIDGE, "hasPermission", flag)
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun requestPermissionsIfNeeded() {
+        val missingPermissions = permissions.filter {
+            checkSelfPermission(it) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        }
+        if (missingPermissions.isNotEmpty()) {
+            requestPermissions(missingPermissions.toTypedArray(), 1001)
+        } else {
+            startNotificationService()
+        }
+    }
 }
+

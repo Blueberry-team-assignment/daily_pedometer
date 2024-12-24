@@ -20,7 +20,6 @@ class PermissionHandlingManager(
         }
     }
 
-
     /// 일반 권한 요청
     fun requestPermission(activity: Activity) {
         ActivityCompat.requestPermissions(activity, requiredPermissions.toTypedArray(), 1002)
@@ -43,6 +42,6 @@ class PermissionHandlingManager(
                 ActivityCompat.requestPermissions(activity, arrayOf(foregroundHealthPermission), 1001)
             }
         }
-//        (activity as MainActivity).startNotificationService()
+        (activity as MainActivity).startNotificationService()
     }
 }

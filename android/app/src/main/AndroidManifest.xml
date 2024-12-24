@@ -35,6 +35,13 @@
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="health"/>
+        <service android:name="com.transistorsoft.flutter.backgroundfetch.HeadlessTask"
+            android:exported="false"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="com.transistorsoft.fetch.event.BACKGROUND_FETCH" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".MainActivity"
             android:exported="true"
