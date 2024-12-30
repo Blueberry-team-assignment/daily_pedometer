@@ -22,7 +22,7 @@ class AppRouterInterceptorImpl implements AppRouterInterceptor {
     bool isFirstTime = await storage.get(key: 'isFistTime') ?? false;
 
     if (!isFirstTime && state.fullPath != AppRoutes.permission) {
-      return AppRoutes.pedometer;
+      return AppRoutes.targetSettings;
     }
     return null;
   }

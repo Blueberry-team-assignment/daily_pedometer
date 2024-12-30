@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/common/providers/provider.dart';
+import 'package:daily_pedometer/common/styles/app_theme.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
 import 'package:daily_pedometer/features/permissions/domain/usecases/request_denied_permissions_usecase.dart';
 import 'package:daily_pedometer/routers/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -32,14 +34,38 @@ void main() async {
   FlutterNativeSplash.remove();
 }
 
-class _App extends ConsumerWidget {
+class _App extends ConsumerStatefulWidget {
   const _App();
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_App> createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<_App> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPersistentFrameCallback((_) {
+      final theme = ref.watch(themeNotifierProviderProvider);
+      final lifecycle = ref.watch(appLifecycleNotifierProvider);
+      _updateSystemNavigationBarColor(theme);
+    });
+  }
+
+  void _updateSystemNavigationBarColor(ThemeMode theme) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness:
+            theme == ThemeMode.light ? Brightness.light : Brightness.dark,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
-    final lifecycle = ref.watch(appLifecycleNotifierProvider);
+    final theme = ref.watch(themeNotifierProviderProvider);
     return MaterialApp.router(
       routerConfig: router.config,
       localizationsDelegates: const [
@@ -51,9 +77,9 @@ class _App extends ConsumerWidget {
         Locale('ko', 'KR'),
         Locale('en', 'US'),
       ],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      theme: AppTheme().createTheme(
+        brightness:
+            theme == ThemeMode.light ? Brightness.light : Brightness.dark,
       ),
     );
   }

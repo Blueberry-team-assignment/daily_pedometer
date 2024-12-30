@@ -10,7 +10,7 @@ class AppRouter {
   final AppRouterInterceptor interceptor;
   AppRouter(this.interceptor);
   late final config = GoRouter(
-    initialLocation: AppRoutes.pedometer,
+    initialLocation: AppRoutes.targetSettings,
     routes: $appRoutes,
     debugLogDiagnostics: true,
     navigatorKey: NavigatorKey.routerKey,

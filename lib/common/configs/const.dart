@@ -9,5 +9,7 @@ const initialStepsKey = 'initialSteps';
 const targetedStepsKey = 'targetedSteps';
 const maxStepsKey = 'maxSteps';
 
+const themeMode = 'themeMode';
+
 /// [Background Fetch TaskID]
 const taskID = 'backgroundFetch';

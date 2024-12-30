@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
+import 'package:daily_pedometer/externals/storage/storage_service.dart';
 import 'package:daily_pedometer/features/pedometer/domain/entities/steps_entity.dart';
 import 'package:daily_pedometer/features/pedometer/domain/repositories/pedometer_repository.dart';
 import 'package:daily_pedometer/features/pedometer/services/pedometer_service.dart';
@@ -28,11 +29,12 @@ final stepsEntityProvider = FutureProvider<StepsEntity>((ref) async {
 
 final pedometerRepositoryProvider = Provider((ref) {
   final service = ref.watch(pedometerServiceProvider);
+  final storage = ref.watch(storageProvider);
   final entity = ref.watch(stepsEntityProvider).value;
   if (entity == null) {
     throw Exception('StepsEntity not initialized');
   }
-  final repository = PedometerRepositoryImpl(service, ref, entity);
+  final repository = PedometerRepositoryImpl(service, storage, entity);
   ref.onDispose(() => repository.dispose());
   return repository;
 });
@@ -64,7 +66,8 @@ final stepCountStreamProvider = StreamProvider<int>((ref) {
 
 class PedometerRepositoryImpl implements PedometerRepository {
   final PedometerService _service;
-  final Ref ref;
+  // final Ref ref;
+  final StorageService storage;
   late StreamSubscription<StepCount> _stepCountSubscription;
 
   // StepsEntity _stepsEntity = StepsEntity(
@@ -88,7 +91,7 @@ class PedometerRepositoryImpl implements PedometerRepository {
 
   PedometerRepositoryImpl(
     this._service,
-    this.ref,
+    this.storage,
     this._stepsEntity,
   );
 
@@ -150,6 +153,8 @@ class PedometerRepositoryImpl implements PedometerRepository {
     _stepsEntity = _stepsEntity.copyWith(
       targetedSteps: steps,
     );
+
+    log("---> 목표 걸음 수가 변경됨: ${_stepsEntity.targetedSteps}");
   }
 
   @override
@@ -166,7 +171,6 @@ class PedometerRepositoryImpl implements PedometerRepository {
   }
 
   void onCountSteps(StepCount event) async {
-    final storage = ref.read(storageProvider);
     if (_stepsEntity.initialSteps == -1) {
       updateInitialSteps(event.steps - _stepsEntity.steps);
 
