@@ -7,7 +7,7 @@ part of 'provider.dart';
 // **************************************************************************
 
 String _$themeNotifierProviderHash() =>
-    r'1d3917d361bba05856a6466ac318f6c146d501d8';
+    r'365820e6b4ff7c7993db54080d1a1bdd5e3c468b';
 
 /// See also [ThemeNotifierProvider].
 @ProviderFor(ThemeNotifierProvider)

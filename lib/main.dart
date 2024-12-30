@@ -34,23 +34,8 @@ void main() async {
   FlutterNativeSplash.remove();
 }
 
-class _App extends ConsumerStatefulWidget {
+class _App extends ConsumerWidget {
   const _App();
-
-  @override
-  ConsumerState<_App> createState() => _AppState();
-}
-
-class _AppState extends ConsumerState<_App> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPersistentFrameCallback((_) {
-      final theme = ref.watch(themeNotifierProviderProvider);
-      final lifecycle = ref.watch(appLifecycleNotifierProvider);
-      _updateSystemNavigationBarColor(theme);
-    });
-  }
 
   void _updateSystemNavigationBarColor(ThemeMode theme) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -63,9 +48,11 @@ class _AppState extends ConsumerState<_App> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final lifecycle = ref.watch(appLifecycleNotifierProvider);
     final theme = ref.watch(themeNotifierProviderProvider);
+    _updateSystemNavigationBarColor(theme);
     return MaterialApp.router(
       routerConfig: router.config,
       localizationsDelegates: const [

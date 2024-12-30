@@ -4,6 +4,7 @@ part of 'provider.dart';
 class ThemeNotifierProvider extends _$ThemeNotifierProvider {
   @override
   ThemeMode build() {
+    state = ThemeMode.light;
     _loadThemeMode();
     return state;
   }

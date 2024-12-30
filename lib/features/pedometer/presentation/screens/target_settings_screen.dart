@@ -5,6 +5,7 @@ import 'package:daily_pedometer/common/providers/provider.dart';
 import 'package:daily_pedometer/features/pedometer/data/repositories/pedometer_repository_impl.dart';
 import 'package:daily_pedometer/features/pedometer/domain/usecases/get_step_status_usecase.dart';
 import 'package:daily_pedometer/features/pedometer/presentation/widgets/rolled_number_picker.dart';
+import 'package:daily_pedometer/features/pedometer/presentation/widgets/steps_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,54 +38,64 @@ class _TargetSettingsScreenState extends ConsumerState<TargetSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Row(
-              children: [
-                ...List.generate(
-                  digits.length,
-                  (index) {
-                    return Expanded(
-                      child: RolledNumberPicker(
-                        initialValue: selectedValues[index],
-                        values: digits[index],
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValues[index] = value;
-                          });
-                        },
-                      ),
-                    );
-                  },
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      // final theme =
-                      //     ref.read(themeNotifierProviderProvider.notifier);
-                      // theme.toggleTheme();
-                      final repository = ref.read(pedometerRepositoryProvider);
-                      repository.updateTargetedSteps(targetedSteps);
-                      log('$targetedSteps');
-                    },
-                    child: Text("선택하기")),
-              ],
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  // final theme =
-                  //     ref.read(themeNotifierProviderProvider.notifier);
-                  // theme.toggleTheme();
-                  final repository = ref.read(pedometerRepositoryProvider);
-                  repository.updateTargetedSteps(targetedSteps);
-                  log('$targetedSteps');
-                },
-                child: Text("선택하기")),
-          ),
+          Expanded(flex: 1, child: StepsPicker()),
+          const Divider(),
+          Expanded(flex: 1, child: StepsPicker()),
+          const Divider(),
+          Expanded(flex: 2, child: Container()),
         ],
       ),
+      // body: Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     Expanded(
+      //       child: Row(
+      //         children: [
+      //           ...List.generate(
+      //             digits.length,
+      //             (index) {
+      //               return Expanded(
+      //                 child: RolledNumberPicker(
+      //                   initialValue: selectedValues[index],
+      //                   values: digits[index],
+      //                   onChanged: (value) {
+      //                     setState(() {
+      //                       selectedValues[index] = value;
+      //                     });
+      //                   },
+      //                 ),
+      //               );
+      //             },
+      //           ),
+      //           ElevatedButton(
+      //               onPressed: () async {
+      //                 // final theme =
+      //                 //     ref.read(themeNotifierProviderProvider.notifier);
+      //                 // theme.toggleTheme();
+      //                 final repository = ref.read(pedometerRepositoryProvider);
+      //                 repository.updateTargetedSteps(targetedSteps);
+      //                 log('$targetedSteps');
+      //               },
+      //               child: Text("선택하기")),
+      //         ],
+      //       ),
+      //     ),
+      //     const Divider(),
+      //     Center(
+      //       child: ElevatedButton(
+      //           onPressed: () async {
+      //             final theme =
+      //                 ref.read(themeNotifierProviderProvider.notifier);
+      //             theme.toggleTheme();
+      //             // final repository = ref.read(pedometerRepositoryProvider);
+      //             // repository.updateTargetedSteps(targetedSteps);
+      //             // log('$targetedSteps');
+      //           },
+      //           child: Text("선택하기")),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
