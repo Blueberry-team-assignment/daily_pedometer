@@ -30,13 +30,24 @@ final stepsEntityProvider = FutureProvider<StepsEntity>((ref) async {
 final pedometerRepositoryProvider = Provider((ref) {
   final service = ref.watch(pedometerServiceProvider);
   final storage = ref.watch(storageProvider);
-  final entity = ref.watch(stepsEntityProvider).value;
-  if (entity == null) {
-    throw Exception('StepsEntity not initialized');
-  }
-  final repository = PedometerRepositoryImpl(service, storage, entity);
-  ref.onDispose(() => repository.dispose());
-  return repository;
+  // final entity = ref.watch(stepsEntityProvider).value;
+  // if (entity == null) {
+  //   throw Exception('StepsEntity not initialized');
+  // }
+  // final repository = PedometerRepositoryImpl(service, storage, entity);
+  // ref.onDispose(() => repository.dispose());
+  // return repository;
+  final stepsEntityAsync = ref.watch(stepsEntityProvider);
+
+  return stepsEntityAsync.when(
+    data: (entity) {
+      final repository = PedometerRepositoryImpl(service, storage, entity);
+      ref.onDispose(() => repository.dispose());
+      return repository;
+    },
+    loading: () => throw Exception('StepsEntity is loading'),
+    error: (error, stackTrace) => throw Exception('StepsEntity failed to load'),
+  );
 });
 
 final pedometerInitializationProvider = FutureProvider<void>((ref) async {

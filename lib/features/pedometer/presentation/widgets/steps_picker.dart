@@ -7,10 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class StepsPicker extends ConsumerStatefulWidget {
   // final List<List<int>> digits;
   // final List<int> selectedValues;
+  final Function(int targetedValue) onChanged;
   final VoidCallback? onPressed;
   final String buttonTitle;
   const StepsPicker({
     super.key,
+    required this.onChanged,
     this.onPressed,
     this.buttonTitle = "선택하기",
     // required this.digits,
@@ -62,7 +64,12 @@ class _StepsPickerState extends ConsumerState<StepsPicker> {
                 },
               ),
               ElevatedButton(
-                onPressed: widget.onPressed,
+                onPressed: () {
+                  if (widget.onPressed != null) {
+                    widget.onChanged(targetedSteps);
+                    widget.onPressed!();
+                  }
+                },
                 child: Text(widget.buttonTitle),
               ),
             ],

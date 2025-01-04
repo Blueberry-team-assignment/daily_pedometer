@@ -18,30 +18,49 @@ class TargetSettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _TargetSettingsScreenState extends ConsumerState<TargetSettingsScreen> {
-  final List<int> selectedValues = [0, 0, 0, 0];
-  final List<List<int>> digits = [
-    List.generate(10, (index) => index),
-    List.generate(10, (index) => index),
-    List.generate(10, (index) => index),
-    List.generate(10, (index) => index),
-  ];
-  int get targetedSteps {
-    int result = 0;
-    for (int i = 0; i < selectedValues.length; i++) {
-      result +=
-          selectedValues[i] * (pow(10, selectedValues.length - i - 1) as int);
-    }
-    return result;
-  }
+  // final List<int> selectedValues = [0, 0, 0, 0];
+  // final List<List<int>> digits = [
+  //   List.generate(10, (index) => index),
+  //   List.generate(10, (index) => index),
+  //   List.generate(10, (index) => index),
+  //   List.generate(10, (index) => index),
+  // ];
+  // int get targetedSteps {
+  //   int result = 0;
+  //   for (int i = 0; i < selectedValues.length; i++) {
+  //     result +=
+  //         selectedValues[i] * (pow(10, selectedValues.length - i - 1) as int);
+  //   }
+  //   return result;
+  // }
+  int targetedSteps = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(flex: 1, child: StepsPicker()),
+          Text("목표 걸음 수"),
+          Expanded(
+            flex: 1,
+            child: StepsPicker(
+              onChanged: (int value) {
+                log("value: $value");
+                targetedSteps = value;
+              },
+              onPressed: () async {
+                final repository = ref.read(pedometerRepositoryProvider);
+                repository.updateTargetedSteps(targetedSteps);
+              },
+            ),
+          ),
           const Divider(),
-          Expanded(flex: 1, child: StepsPicker()),
+          Expanded(
+            flex: 1,
+            child: StepsPicker(
+              onChanged: (int value) {},
+            ),
+          ),
           const Divider(),
           Expanded(flex: 2, child: Container()),
         ],

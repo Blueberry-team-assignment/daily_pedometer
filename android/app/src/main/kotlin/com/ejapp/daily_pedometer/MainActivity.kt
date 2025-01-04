@@ -34,18 +34,13 @@ class MainActivity: FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        permissionHandlingManager = PermissionHandlingManager(this, permissions)
-
-        if (!permissionHandlingManager.checkPermissionStatus()) {
-            permissionHandlingManager.requestForegroundPermission(this)
-        }
-//        requestPermissionsIfNeeded()
-
-
-//        else {
-//            startNotificationService()
+//        permissionHandlingManager = PermissionHandlingManager(this, permissions)
+//
+//        if (!permissionHandlingManager.checkPermissionStatus()) {
+//            permissionHandlingManager.requestForegroundPermission(this)
 //        }
-
+        requestPermissionsIfNeeded()
+//        permissionHandlingManager.requestForegroundPermission(this)
     }
 
     override fun onRequestPermissionsResult(
