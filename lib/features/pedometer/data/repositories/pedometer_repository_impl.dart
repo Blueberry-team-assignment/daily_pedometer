@@ -5,6 +5,7 @@ import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
 import 'package:daily_pedometer/externals/storage/storage_service.dart';
 import 'package:daily_pedometer/features/pedometer/domain/entities/steps_entity.dart';
+import 'package:daily_pedometer/features/pedometer/domain/notifiers/steps_notifier.dart';
 import 'package:daily_pedometer/features/pedometer/domain/repositories/pedometer_repository.dart';
 import 'package:daily_pedometer/features/pedometer/services/pedometer_service.dart';
 import 'package:flutter/services.dart';
@@ -30,24 +31,15 @@ final stepsEntityProvider = FutureProvider<StepsEntity>((ref) async {
 final pedometerRepositoryProvider = Provider((ref) {
   final service = ref.watch(pedometerServiceProvider);
   final storage = ref.watch(storageProvider);
-  // final entity = ref.watch(stepsEntityProvider).value;
-  // if (entity == null) {
-  //   throw Exception('StepsEntity not initialized');
-  // }
-  // final repository = PedometerRepositoryImpl(service, storage, entity);
-  // ref.onDispose(() => repository.dispose());
-  // return repository;
-  final stepsEntityAsync = ref.watch(stepsEntityProvider);
 
-  return stepsEntityAsync.when(
-    data: (entity) {
-      final repository = PedometerRepositoryImpl(service, storage, entity);
-      ref.onDispose(() => repository.dispose());
-      return repository;
-    },
-    loading: () => throw Exception('StepsEntity is loading'),
-    error: (error, stackTrace) => throw Exception('StepsEntity failed to load'),
-  );
+  final entity = ref.watch(stepsEntityNotifierProvider);
+  // final entity = ref.watch(stepsEntityProvider).value;
+  if (entity == null) {
+    throw Exception('StepsEntity not initialized');
+  }
+  final repository = PedometerRepositoryImpl(service, storage, entity);
+  ref.onDispose(() => repository.dispose());
+  return repository;
 });
 
 final pedometerInitializationProvider = FutureProvider<void>((ref) async {
@@ -77,7 +69,6 @@ final stepCountStreamProvider = StreamProvider<int>((ref) {
 
 class PedometerRepositoryImpl implements PedometerRepository {
   final PedometerService _service;
-  // final Ref ref;
   final StorageService storage;
   late StreamSubscription<StepCount> _stepCountSubscription;
 
@@ -165,6 +156,7 @@ class PedometerRepositoryImpl implements PedometerRepository {
       targetedSteps: steps,
     );
 
+    await storage.set(key: targetedStepsKey, data: _stepsEntity.targetedSteps);
     log("---> 목표 걸음 수가 변경됨: ${_stepsEntity.targetedSteps}");
   }
 

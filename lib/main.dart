@@ -4,6 +4,7 @@ import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/common/providers/provider.dart';
 import 'package:daily_pedometer/common/styles/app_theme.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
+import 'package:daily_pedometer/features/pedometer/domain/notifiers/steps_notifier.dart';
 import 'package:daily_pedometer/features/permissions/domain/usecases/request_denied_permissions_usecase.dart';
 import 'package:daily_pedometer/routers/router.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,10 @@ class _App extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final lifecycle = ref.watch(appLifecycleNotifierProvider);
     final theme = ref.watch(themeNotifierProviderProvider);
+    final entity = ref.watch(stepsEntityNotifierProvider.notifier);
+    entity.initialize();
     _updateSystemNavigationBarColor(theme);
+
     return MaterialApp.router(
       routerConfig: router.config,
       localizationsDelegates: const [

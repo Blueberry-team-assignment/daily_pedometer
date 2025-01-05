@@ -3,9 +3,10 @@ import 'dart:math' hide log;
 
 import 'package:daily_pedometer/common/providers/provider.dart';
 import 'package:daily_pedometer/features/pedometer/data/repositories/pedometer_repository_impl.dart';
-import 'package:daily_pedometer/features/pedometer/domain/usecases/get_step_status_usecase.dart';
-import 'package:daily_pedometer/features/pedometer/presentation/widgets/rolled_number_picker.dart';
+import 'package:daily_pedometer/features/pedometer/domain/notifiers/steps_notifier.dart';
+
 import 'package:daily_pedometer/features/pedometer/presentation/widgets/steps_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,51 +19,59 @@ class TargetSettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _TargetSettingsScreenState extends ConsumerState<TargetSettingsScreen> {
-  // final List<int> selectedValues = [0, 0, 0, 0];
-  // final List<List<int>> digits = [
-  //   List.generate(10, (index) => index),
-  //   List.generate(10, (index) => index),
-  //   List.generate(10, (index) => index),
-  //   List.generate(10, (index) => index),
-  // ];
-  // int get targetedSteps {
-  //   int result = 0;
-  //   for (int i = 0; i < selectedValues.length; i++) {
-  //     result +=
-  //         selectedValues[i] * (pow(10, selectedValues.length - i - 1) as int);
-  //   }
-  //   return result;
-  // }
   int targetedSteps = 0;
 
   @override
   Widget build(BuildContext context) {
+    final repository = ref.read(pedometerRepositoryProvider);
+    final stepsNotifier = ref.watch(stepsEntityNotifierProvider.notifier);
     return Scaffold(
       body: Column(
         children: [
-          Text("목표 걸음 수"),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Text(
+                "목표 걸음 수",
+                style: TextStyle(
+                  fontSize: 42,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             flex: 1,
             child: StepsPicker(
-              onChanged: (int value) {
-                log("value: $value");
+              onChanged: (int value) async {
                 targetedSteps = value;
               },
               onPressed: () async {
-                final repository = ref.read(pedometerRepositoryProvider);
                 repository.updateTargetedSteps(targetedSteps);
               },
             ),
           ),
           const Divider(),
           Expanded(
-            flex: 1,
-            child: StepsPicker(
-              onChanged: (int value) {},
+            flex: 2,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    alignment: Alignment.topRight,
+                    child: Text("목표 걸음 수: ${stepsNotifier.getTargetedSteps()}"),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text("시작하기"),
+                  ),
+                ),
+              ],
             ),
           ),
-          const Divider(),
-          Expanded(flex: 2, child: Container()),
         ],
       ),
       // body: Column(
