@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:background_fetch/background_fetch.dart';
 
@@ -19,14 +18,14 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  final container = ProviderContainer();
-  final checkAllPermissionsGrantedUseCase =
-      container.read(requestDeniedPermissionUsecaseProvider);
+  // final container = ProviderContainer();
+  // final checkAllPermissionsGrantedUseCase =
+  //     container.read(requestDeniedPermissionUsecaseProvider);
 
-  await checkAllPermissionsGrantedUseCase.execute([
-    Permission.location,
-    Permission.activityRecognition,
-  ]);
+  // await checkAllPermissionsGrantedUseCase.execute([
+  //   Permission.location,
+  //   Permission.activityRecognition,
+  // ]);
 
   runApp(const ProviderScope(
     child: _App(),

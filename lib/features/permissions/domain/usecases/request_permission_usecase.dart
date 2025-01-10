@@ -3,18 +3,18 @@ import 'package:daily_pedometer/features/permissions/domain/repositories/permiss
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-final requestPermissionUsecaseProvider = Provider(
-  (ref) => RequestPermissionUsecase(
-    ref.watch(permissionRepositoryProvider),
-  ),
-);
+// final requestPermissionUsecaseProvider = Provider(
+//   (ref) => RequestPermissionUsecase(
+//     ref.watch(permissionRepositoryProvider),
+//   ),
+// );
 
-class RequestPermissionUsecase {
-  final PermissionRepository repository;
+// class RequestPermissionUsecase {
+//   final PermissionRepository repository;
 
-  RequestPermissionUsecase(this.repository);
+//   RequestPermissionUsecase(this.repository);
 
-  Future<void> execute(Permission permission) async {
-    await repository.requestPermission(permission);
-  }
-}
+//   Future<void> execute(Permission permission) async {
+//     await repository.requestPermission(permission);
+//   }
+// }

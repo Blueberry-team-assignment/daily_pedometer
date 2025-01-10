@@ -148,7 +148,7 @@ final appRouterProvider = AutoDisposeProvider<AppRouter>.internal(
 // ignore: unused_element
 typedef AppRouterRef = AutoDisposeProviderRef<AppRouter>;
 String _$appRouterInterceptorHash() =>
-    r'aa5248a407e1198c21dec16cef2b19cbe39a5ee4';
+    r'31f4433255d4313fa7db6acf926a080d2d5cf5f3';
 
 /// See also [appRouterInterceptor].
 @ProviderFor(appRouterInterceptor)
