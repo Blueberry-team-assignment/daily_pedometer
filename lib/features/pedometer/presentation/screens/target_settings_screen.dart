@@ -55,25 +55,15 @@ class _TargetSettingsScreenState extends ConsumerState<TargetSettingsScreen> {
           const Divider(),
           Expanded(
             flex: 2,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    alignment: Alignment.topRight,
-                    child: Text("목표 걸음 수: ${stepsNotifier.getTargetedSteps()}"),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.pushReplacement(AppRoutes.pedometer);
-                    },
-                    child: Text("시작하기"),
-                  ),
-                ),
-              ],
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                onPressed: () {
+                  context.pushReplacement(AppRoutes.pedometer);
+                },
+                child: Text("시작하기"),
+              ),
             ),
           ),
         ],

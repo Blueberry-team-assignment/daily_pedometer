@@ -1,3 +1,4 @@
+import 'package:daily_pedometer/common/widgets/donut_graph.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
 import 'package:daily_pedometer/features/pedometer/data/repositories/pedometer_repository_impl.dart';
 import 'package:daily_pedometer/features/pedometer/domain/usecases/get_result_usecase.dart';
@@ -23,6 +24,10 @@ class PedometerScreen extends ConsumerWidget {
           data: (steps) => Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              DonutGraph(
+                steps: steps,
+                targetedSteps: getStepStatusUsecase.execute().targetedSteps,
+              ),
               Text("걸음 수", style: TextStyle(fontSize: 24)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -41,14 +46,14 @@ class PedometerScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              const Divider(),
-              Text(
-                getResult() ? "Success" : "Fail",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: getResult() ? Colors.green : Colors.red,
-                ),
-              ),
+              // const Divider(),
+              // Text(
+              //   getResult() ? "Success" : "Fail",
+              //   style: TextStyle(
+              //     fontSize: 20,
+              //     color: getResult() ? Colors.green : Colors.red,
+              //   ),
+              // ),
             ],
           ),
           error: (err, _) => Text("$err"),
