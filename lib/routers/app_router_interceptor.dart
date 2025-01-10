@@ -24,6 +24,7 @@ class AppRouterInterceptorImpl implements AppRouterInterceptor {
 
     /// 리셋된 후에 이 화면으로 이동
     if (reset) {
+      await storage.set(key: resetTime, data: false);
       return AppRoutes.targetResult;
     }
 

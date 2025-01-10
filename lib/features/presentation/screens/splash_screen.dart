@@ -16,6 +16,9 @@ class SplashScreen extends ConsumerWidget {
     final storage = ref.read(storageProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      /// 최초 접근인지 확인
+      /// 최초 접근 = 권한 확인을 안한 사람
+      /// 이 외에도, 디바이스 넘버링을 저장해서, 해당 디바이스를 식별할 수 있으나 이번엔 사용 안함
       final firstTime = await storage.get(key: isFirstTime) ?? true;
       if (context.mounted) {
         if (firstTime) {
