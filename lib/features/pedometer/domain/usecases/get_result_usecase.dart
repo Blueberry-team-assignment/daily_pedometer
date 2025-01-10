@@ -13,7 +13,7 @@ class GetResultUsecase {
 
   GetResultUsecase(this.repository);
 
-  Future<bool> execute() async {
-    return await repository.getResult();
+  bool execute() {
+    return repository.getResult();
   }
 }

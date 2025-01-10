@@ -129,7 +129,7 @@ class PedometerRepositoryImpl implements PedometerRepository {
   }
 
   @override
-  Future<bool> getResult() async {
+  bool getResult() {
     if (checkTargetedReached()) {
       return true;
     }
@@ -189,8 +189,15 @@ class PedometerRepositoryImpl implements PedometerRepository {
       newSteps = 0;
     }
 
-    if (_stepsEntity.steps > _stepsEntity.maxSteps) {
-      updateSteps(_stepsEntity.maxSteps);
+    int maxSteps = 0;
+    // if (_stepsEntity.targetedSteps < 1) {
+    //   maxSteps = _stepsEntity.targetedSteps
+    // }
+    _stepsEntity.targetedSteps < 1
+        ? (maxSteps = _stepsEntity.targetedSteps)
+        : (maxSteps = _stepsEntity.maxSteps);
+    if (_stepsEntity.steps > maxSteps) {
+      updateSteps(maxSteps);
     } else {
       updateSteps(newSteps);
     }

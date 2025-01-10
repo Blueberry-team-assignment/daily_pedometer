@@ -21,7 +21,7 @@ abstract class PedometerRepository {
   int getRemainingSteps();
 
   /// 목표 도달 시 결과 처리
-  Future<bool> getResult();
+  bool getResult();
 
   /// 걸음 수 업데이트
   Future<void> updateSteps(int steps);
