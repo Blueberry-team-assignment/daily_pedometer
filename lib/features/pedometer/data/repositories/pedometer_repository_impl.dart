@@ -170,6 +170,7 @@ class PedometerRepositoryImpl implements PedometerRepository {
     _stepsEntity = _stepsEntity.copyWith(
       steps: 0,
       initialSteps: 0,
+      targetedSteps: 0,
     );
   }
 

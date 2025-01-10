@@ -4,6 +4,7 @@ import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/common/providers/provider.dart';
 import 'package:daily_pedometer/common/styles/app_theme.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
+import 'package:daily_pedometer/features/pedometer/data/repositories/pedometer_repository_impl.dart';
 import 'package:daily_pedometer/features/pedometer/domain/notifiers/steps_notifier.dart';
 import 'package:daily_pedometer/features/permissions/domain/usecases/request_denied_permissions_usecase.dart';
 import 'package:daily_pedometer/routers/router.dart';
@@ -116,6 +117,7 @@ Future<void> onFetch(String taskId) async {
 Future<void> reset() async {
   final container = ProviderContainer();
   final storage = container.read(storageProvider);
+  final repository = container.read(pedometerRepositoryProvider);
 
   /// 초기화
   try {
@@ -123,6 +125,10 @@ Future<void> reset() async {
     await platform.invokeMethod('updateService', {
       'steps': 0,
     });
+    repository.resetSteps();
+
+    // 리셋 후에 화면 이동을 위해 storage에 저장
+    await storage.set(key: resetTime, data: true);
   } catch (err) {
     log('[Error]: $err');
   }

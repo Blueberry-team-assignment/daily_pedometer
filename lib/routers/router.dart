@@ -1,3 +1,4 @@
+import 'package:daily_pedometer/common/configs/const.dart';
 import 'package:daily_pedometer/externals/storage/storage_provider.dart';
 import 'package:daily_pedometer/externals/storage/storage_service.dart';
 import 'package:daily_pedometer/features/pedometer/presentation/screens/pedometer_screen.dart';

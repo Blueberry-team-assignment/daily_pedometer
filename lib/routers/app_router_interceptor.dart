@@ -19,11 +19,17 @@ class AppRouterInterceptorImpl implements AppRouterInterceptor {
   FutureOr<String?> canGo(BuildContext context, GoRouterState state) async {
     // if (state.fullPath )
     /// 최초 방문
-    bool isFirstTime = await storage.get(key: 'isFistTime') ?? false;
+    bool firstTime = await storage.get(key: isFirstTime) ?? true;
+    bool reset = await storage.get(key: resetTime) ?? false;
 
-    // if (!isFirstTime && state.fullPath != AppRoutes.permission) {
-    //   return AppRoutes.targetSettings;
-    // }
+    /// 리셋된 후에 이 화면으로 이동
+    if (reset) {
+      return AppRoutes.targetResult;
+    }
+
+    if (!firstTime) {
+      return AppRoutes.targetSettings;
+    }
     return null;
   }
 }

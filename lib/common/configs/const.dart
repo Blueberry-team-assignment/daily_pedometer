@@ -8,6 +8,8 @@ const stepsKey = 'steps';
 const initialStepsKey = 'initialSteps';
 const targetedStepsKey = 'targetedSteps';
 const maxStepsKey = 'maxSteps';
+const isFirstTime = 'isFirstTime';
+const resetTime = 'resetTime';
 
 const themeMode = 'themeMode';
 
